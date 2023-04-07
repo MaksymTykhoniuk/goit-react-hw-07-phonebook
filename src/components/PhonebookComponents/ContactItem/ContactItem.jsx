@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import { RxCrossCircled } from 'react-icons/rx';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../../redux/contactsSlice';
+import { useDeleteContactMutation } from '../../../redux/contactsSlice';
 import { Name, PhoneNumber, Item, Btn } from './ContactItem.styled';
 
 export const ContactItem = ({ contact }) => {
-  const dispatch = useDispatch();
   const { id, name, number } = contact;
+  const [deleteContact, result] = useDeleteContactMutation();
+
   return (
     <>
       <Item>
@@ -15,7 +15,8 @@ export const ContactItem = ({ contact }) => {
         <Btn
           type="button"
           aria-label="Delete contact"
-          onClick={() => dispatch(deleteContact(id))}
+          disabled={result.isLoading}
+          onClick={() => deleteContact(id)}
         >
           <RxCrossCircled size="2em" />
         </Btn>

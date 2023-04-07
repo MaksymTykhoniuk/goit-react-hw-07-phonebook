@@ -1,14 +1,16 @@
 import { RiUserAddFill } from 'react-icons/ri';
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
 import { Form, Btn, Input } from './PhonebookForm.styled';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../../redux/contactsSlice';
+
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from '../../../redux/contactsSlice';
 
 export const PhonebookForm = () => {
-  const contacts = useSelector(state => state.contacts.value);
-  const dispatch = useDispatch();
+  const { data } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -23,16 +25,15 @@ export const PhonebookForm = () => {
     }
   };
 
-  const handleFormSubmit = evt => {
+  const handleFormSubmit = async evt => {
     evt.preventDefault();
 
     const contact = {
-      id: nanoid(),
       name,
-      number,
+      phone: number,
     };
 
-    const alreadyExists = contacts.findIndex(item => {
+    const alreadyExists = data.findIndex(item => {
       const prevItem = item.name.toLowerCase();
       const newItem = contact.name.toLowerCase();
       return prevItem === newItem;
@@ -42,7 +43,7 @@ export const PhonebookForm = () => {
       Notify.failure(`${contact.name} is already in contacts`);
       return;
     } else {
-      dispatch(addContact(contact));
+      await addContact(contact);
     }
 
     resetForm();
@@ -70,7 +71,7 @@ export const PhonebookForm = () => {
         name="number"
         value={number}
         placeholder="Enter phone number"
-        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
         onChange={handleInputChange}
         required
