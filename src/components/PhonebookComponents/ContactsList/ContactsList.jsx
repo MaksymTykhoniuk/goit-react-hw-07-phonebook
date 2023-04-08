@@ -1,7 +1,7 @@
 import { ContactItem } from 'components/PhonebookComponents/ContactItem/ContactItem';
 import { List } from './ContactsList.styled';
 import { useSelector } from 'react-redux';
-import { useGetContactsQuery } from '../../../redux/contactsSlice';
+import { useGetContactsQuery } from 'redux/contactsSlice';
 
 export const ContactsList = () => {
   const { data } = useGetContactsQuery();
@@ -13,6 +13,17 @@ export const ContactsList = () => {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
+
+  // -------createAsyncThunk() v.
+
+  // const contacts = useSelector(state => state.contacts.items)
+
+  //   const getFilteredContacts = () => {
+  //     const normalizedFilter = filter.toLowerCase().trim();
+  //     return contacts.filter(contact =>
+  //       contact.name.toLowerCase().includes(normalizedFilter)
+  //     );
+  //   };
 
   const filteredContacts = getFilteredContacts();
 

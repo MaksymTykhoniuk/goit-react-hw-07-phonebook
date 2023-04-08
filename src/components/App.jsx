@@ -5,9 +5,21 @@ import { Section } from './Section/Section';
 import { Notification } from './PhonebookComponents/Notification/Notification';
 import { useGetContactsQuery } from 'redux/contactsSlice';
 import { TailSpin } from 'react-loader-spinner';
+// ----- createAsyncThunk v.
+// import { useDispatch, useSelector } from 'react-redux';
 
 export const App = () => {
   const { data, error, isLoading } = useGetContactsQuery();
+
+  // ----- createAsyncThunk v.
+  // const dispatch = useDispatch();
+  // const contacts = useSelector(state => state.contacts.items);
+  // const isLoading = useSelector(state => state.contacts.isLoading);
+  // const error = useSelector(state => state.contacts.error);
+
+  // useEffect(() => {
+  //   dispatch(fetchContacts());
+  // }, [dispatch]);
 
   return (
     <>
@@ -17,12 +29,16 @@ export const App = () => {
       {isLoading && (
         <Section>
           <TailSpin
-            height="380"
-            width="380"
-            color="#4fa94d"
+            height="280"
+            width="280"
+            color="#e0a96d"
             ariaLabel="tail-spin-loading"
             radius="1"
-            wrapperStyle={{}}
+            wrapperStyle={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
             wrapperClass=""
             visible={true}
           />
@@ -31,7 +47,7 @@ export const App = () => {
 
       {error && (
         <Section>
-          <p>Oops, soomething went wrong</p>
+          <Notification message="Oops, soomething went wrong"></Notification>
         </Section>
       )}
 

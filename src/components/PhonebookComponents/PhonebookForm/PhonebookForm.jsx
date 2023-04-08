@@ -2,15 +2,23 @@ import { RiUserAddFill } from 'react-icons/ri';
 import { useState } from 'react';
 import { Notify } from 'notiflix';
 import { Form, Btn, Input } from './PhonebookForm.styled';
-
+import { TailSpin } from 'react-loader-spinner';
 import {
   useAddContactMutation,
   useGetContactsQuery,
-} from '../../../redux/contactsSlice';
+} from 'redux/contactsSlice';
+
+// ----- createAsyncThunk v.
+// import { useDispatch, useSelector } from 'react-redux';
+// import { addContact } from 'redux/operations';
 
 export const PhonebookForm = () => {
   const { data } = useGetContactsQuery();
-  const [addContact] = useAddContactMutation();
+  const [addContact, { isLoading }] = useAddContactMutation();
+
+  // ----- createAsyncThunk v.
+  // const dispatch = useDispatch();
+  // const contacts = useSelector(state => state.contacts.items);
 
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -44,6 +52,7 @@ export const PhonebookForm = () => {
       return;
     } else {
       await addContact(contact);
+      // dispatch(addContact(contact))
     }
 
     resetForm();
@@ -77,7 +86,18 @@ export const PhonebookForm = () => {
         required
       />
       <Btn type="submit" aria-label="Add contact">
-        <RiUserAddFill size="1.8em" />
+        {isLoading ? (
+          <TailSpin
+            height="23"
+            width="23"
+            color="#e0a96d"
+            ariaLabel="tail-spin-loading"
+            radius="1.1"
+            visible={true}
+          />
+        ) : (
+          <RiUserAddFill style={{ marginTop: 2.5 }} size="1.8em" />
+        )}
       </Btn>
     </Form>
   );

@@ -12,3 +12,12 @@ export const store = configureStore({
     contactsApi.middleware,
   ],
 });
+
+// -------createAsyncThunk v.
+
+// export const store = configureStore({
+//   reducer: {
+//     contacts: contactsReducer,
+//     filter: filterReducer,
+//   },
+// });
